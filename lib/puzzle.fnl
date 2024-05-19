@@ -1,23 +1,33 @@
-(fn line-iter [l]
-  "iterator over each character of a string"
-  (string.gmatch l "."))
+(local fun (require :fun))
 
-(local parse {})
+(local puzzle {})
 
-(fn parse.line [l]
-  "parse a sokoban puzzle string"
-  (icollect [c (line-iter l)]
-    (case c
-      " " :air
-      "#" :wall
-      "$" :block
-      "*" :sunk
-      "." :hole
-      "@" :avi)))
+(fn puzzle.parse [f]
+  (tset puzzle :world {; coordinates of walls
+                       :walls {}
+                       ; coordinates of movable block
+                       :blocks {}
+                       ; coordinates of sinks
+                       :sinks {}})
 
-(fn parse.puzzle [f]
-  "parse a sokoban puzzle"
-  (icollect [l (io.lines f)] (parse.line l)))
+  (fn zip [iter]
+    (ipairs (icollect [x _ (iter)] x)))
+  (each [jj line (zip (io.lines f))]
+    (each [ii char (ipairs (icollect [c _ (string.gmatch line ".")] c))]
+      (case char
+        "#" (table.insert puzzle.world.walls [ii jj])
+        "$" (table.insert puzzle.world.blocks [ii jj])
+        "*" (do
+              (table.insert puzzle.world.sinks [ii jj])
+              (table.insert puzzle.world.blocks [ii jj]))
+        "." (table.insert puzzle.world.sinks [ii jj])
+        "@" (tset puzzle.world :avi [ii jj])))))
+
+(local p (puzzle.parse :puzzles/microban-1.txt))
+
+(let [[x y] puzzle.world.avi] (print :avi x y))
+(each [ii vv (ipairs puzzle.world.blocks)]
+  (let [[x y] vv] (print ii vv)))
 
 ; exports
-{:parse parse.puzzle}
+{:parse puzzle.parse}
