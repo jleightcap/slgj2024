@@ -1,4 +1,4 @@
-SRC = lib/main.fnl
+SRCS = $(wildcard lib/*.fnl)
 
 FENNEL ?= fennel
 LOVE ?= love
@@ -6,7 +6,7 @@ LOVE ?= love
 %.lua: %.fnl
 	$(FENNEL) --compile $^ > $@
 
-all: $(SRC:.fnl=.lua)
+all: $(SRCS:.fnl=.lua)
 
 .PHONY: run
 run: all
