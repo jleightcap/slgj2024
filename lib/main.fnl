@@ -20,15 +20,18 @@
       (when (love.keyboard.isDown key)
         (tset state axis (+ (. state axis) (* change speed))))))
 
+  (print w h state.x state.y)
+  (print (lume.clamp state.x 0 w))
+
   ;; conditionals for dynamic behavior, responding to input
   (when (or (< state.y 0) (> state.y h))
-    (set state.y (mod state.y state.y)))
+    (set state.y (lume.clamp state.y 0 h)))
   (when (or (< state.x 0) (> state.x w))
-    (set state.x (- 0 state.x))))
+    (set state.x (lume.clamp state.x 0 w))))
 
 (fn love.keypressed [key]
   (when (= :escape key) (love.event.quit)))
 
 (fn love.draw []
   ;; (love.graphics.circle "fill" 30 40 10)
-  (love.graphics.rectangle :fill state.x state.y 10 100))
+  (love.graphics.rectangle :fill state.x state.y 10 10))

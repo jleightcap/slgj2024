@@ -9,4 +9,7 @@ references:
 conf.lua:
 - https://love2d.org/wiki/Config_Files
 
+config:
+- add readline support for REPL development: https://wiki.fennel-lang.org/Readline
+
 
