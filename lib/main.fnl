@@ -1,39 +1,34 @@
+(local lume (require :lume))
+
 (local (speed ball-speed) (values 10 200))
 (local state {:x 100 :y 100})
 (local (w h) (love.window.getMode))
 
-(local keys {:w [:up] :a [:left] :s [:down] :d [:right]})
+(local keys {:w [:y -1] :a [:x -1] :s [:y 1] :d [:x 1]})
 
-(fn on-paddle? []
-  (or (and (< state.x 20)
-           (< state.left state.y (+ state.left 100)))
-      (and (< (- w 20) state.x)
-           (< state.right state.y (+ state.right 100)))))
+(local (speed) (values 10))
+(local state {:x 100 :y 100})
+(local (w h) (love.window.getMode))
 
 (fn love.update [dt]
-  -- (set state.x (+ state.x (* state.dx dt ball-speed)))
-  -- (set state.y (+ state.y (* state.dy dt ball-speed)))
+  ;; continuous behavior
+  ;; (set state.x (+ state.x 1))
+
+  ;; keypress
   (each [key action (pairs keys)]
-    (when (love.keyboard.isDown key)
-      (tset state player (+ (. state player) (* dir speed))))))
+    (let [[axis change] action]
+      (when (love.keyboard.isDown key)
+        (tset state axis (+ (. state axis) (* change speed))))))
 
+  ;; conditionals for dynamic behavior, responding to input
   (when (or (< state.y 0) (> state.y h))
-    (set state.dy (- 0 state.dy)))
-
-  (when (on-paddle?)
-    (set state.dx (- 0 state.dx)))
-
-  (when (< state.x 0)
-    (print "Right player wins")
-    (love.event.quit))
-  (when (> state.x w)
-    (print "Left player wins")
-    (love.event.quit)))
+    (set state.y (mod state.y state.y)))
+  (when (or (< state.x 0) (> state.x w))
+    (set state.x (- 0 state.x))))
 
 (fn love.keypressed [key]
-  (when (= "escape" key) (love.event.quit)))
+  (when (= :escape key) (love.event.quit)))
 
 (fn love.draw []
-  (love.graphics.rectangle "fill" 10 state.left 10 100)
-  (love.graphics.rectangle "fill" (- w 10) state.right 10 100)
-  (love.graphics.circle "fill" state.x state.y 10))
+  ;; (love.graphics.circle "fill" 30 40 10)
+  (love.graphics.rectangle :fill state.x state.y 10 100))

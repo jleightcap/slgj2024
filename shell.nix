@@ -1,5 +1,5 @@
 with import <nixpkgs> { };
 mkShell {
-  packages = [ ];
+  packages = [ fnlfmt ];
   inputsFrom = [ (callPackage ./. { }) ];
 }
