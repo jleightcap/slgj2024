@@ -2,22 +2,23 @@
 
 (fn parse [f]
   (let [parsed {; coordinates of walls
-               :walls {}
-               ; coordinates of movable block
-               :blocks {}
-               ; coordinates of sinks
-               :sinks {}}]
+                :walls {}
+                ; coordinates of movable block
+                :blocks {}
+                ; coordinates of sinks
+                :sinks {}}]
     (each [[jj line] (fun.enumerate (io.lines f))]
       (var jj (- jj 1)) ; NOTE: why does enumerating io.lines iterator start jj as 2?
       (each [ii char (fun.iter line)]
         (fn tile [id] (table.insert (. parsed id) [ii jj]))
+
         (case char
           "#" (tile :walls)
           "$" (tile :blocks)
           "." (tile :sinks)
           "*" (do
-            (tile :blocks)
-            (tile :sinks))
+                (tile :blocks)
+                (tile :sinks))
           "@" (tset parsed :avi [ii jj]))))
     parsed))
 
