@@ -5,24 +5,18 @@
 (local puzzle (require :lib.parse))
 (local engine (require :lib.engine))
 
-(local (w-px h-px) (values style.w-px style.h-px))
-(local scale style.scale)
-
-(local universe
+;; TODO: abstract :puzzles/microban-1.txt into an argument
+;; first decide on how puzzles are selected, or advanced when won
+(local game
        (let [parsed (puzzle.parse :puzzles/microban-1.txt)]
          {:static {:walls parsed.walls :sinks parsed.sinks}
           :dynamic {:avi parsed.avi :blocks parsed.blocks :moves 0}}))
 
 (fn love.draw []
-  (style.monitor)
-  (style.tput (.. "[löve:soko]$ " universe.dynamic.moves) 2 1)
-  (each [tile locs (pairs {"#" universe.static.walls
-                           :! universe.static.sinks
-                           :O universe.dynamic.blocks
-                           :u [universe.dynamic.avi]})]
-    (each [_ [ii jj] (ipairs locs)]
-      (style.tput tile (+ ii 1) (+ jj 1)))))
+  ;; TODO: this is re-drawing some constant parts of the screen
+  ;; refactor into one-time setup and continuous components
+  (style.universe)
+  (style.render game))
 
 (fn love.keypressed [event]
-  ;; use keypress event to trigger engine tick
-  (set universe.dynamic (engine.tick event universe.static universe.dynamic)))
+  (set game.dynamic (engine.tick event game.static game.dynamic)))

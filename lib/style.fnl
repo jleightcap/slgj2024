@@ -1,7 +1,7 @@
 (local (w-px h-px) (love.window.getMode))
 (local scale (/ w-px 10))
 
-(fn monitor []
+(fn universe []
   (-> (love.graphics.newFont :font/ProggyTiny.ttf scale)
       (love.graphics.setFont))
   (love.graphics.setBackgroundColor (/ 43 255) (/ 43 255) (/ 43 255))
@@ -20,11 +20,20 @@
 (fn tput [s i j]
   (let [i (* 30 i)
         j (* 40 j)]
-    ;; offset shadow
+    ;; black 'shadow' character at an offset, to be partially drawn over
     (love.graphics.setColor (love.math.colorFromBytes 0 0 0))
     (love.graphics.print s (+ i 5) (+ j 5))
-    ;; character
+    ;; character itself
     (love.graphics.setColor (love.math.colorFromBytes 255 204 153))
     (love.graphics.print s i j)))
 
-{: w-px : h-px : scale : monitor : tput}
+(fn render [game]
+  (tput (.. "[löve:soko]$ " game.dynamic.moves) 2 1)
+  (each [tile locs (pairs {"#" game.static.walls
+                           :! game.static.sinks
+                           :O game.dynamic.blocks
+                           :u [game.dynamic.avi]})]
+    (each [_ [ii jj] (ipairs locs)]
+      (tput tile (+ ii 1) (+ jj 1)))))
+
+{: universe : render}
