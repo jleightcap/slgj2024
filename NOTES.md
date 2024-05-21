@@ -24,6 +24,10 @@ parse these plaintext puzzle representations:
 http://www.abelmartin.com/rj/sokobanJS/Skinner/David%20W.%20Skinner%20-%20Sokoban_files/Sasquatch.txt
 into a puzzle structure
 
+# graphics
+
+- https://github.com/Swordfish90/cool-retro-term/tree/f157648d1e51878a10e02a8836c1e15aa8c59cc9/app/qml/fonts/modern-proggy-tiny
+
 # references
 
 - reflections on few basic games, basic setup and links to resources: https://beta7.io/posts/game-development-with-fennel-and-love/
