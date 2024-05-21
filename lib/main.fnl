@@ -1,8 +1,11 @@
 (local lume (require :lume))
 (local fun (require :fun))
 
-(local graphics (require :lib.graphics))
+(local style (require :lib.style))
 (local puzzle (require :lib.parse))
+
+(local (w-px h-px) (values style.w-px style.h-px))
+(local scale style.scale)
 
 (local (world state) (let [parsed (puzzle.parse :puzzles/microban-1.txt)
                            static {:walls parsed.walls :sinks parsed.sinks}
@@ -14,37 +17,19 @@
                                     :moves 0}]
                        (values static dynamic)))
 
-(local (w-px h-px) (love.window.getMode))
-(assert (= (/ w-px h-px) (/ 4 3)))
-(local scale (/ w-px 10))
 (local font (love.graphics.newFont :font/ProggyTiny.ttf scale))
-(fn love.load []
-  (love.graphics.setFont font))
-
+(love.graphics.setFont font)
 (love.graphics.setBackgroundColor (/ 43 255) (/ 43 255) (/ 43 255))
-(fn love.draw []
-  (fn tput [s i j]
-    (love.graphics.setColor (love.math.colorFromBytes 0 0 0))
-    (love.graphics.print s (+ i 5) (+ j 5))
-    (love.graphics.setColor (love.math.colorFromBytes 255 204 153))
-    (love.graphics.print s i j))
 
-  ;; border
-  (love.graphics.setColor (love.math.colorFromBytes 153 117 90))
-  (love.graphics.rectangle :fill 0 0 30 h-px)
-  (love.graphics.rectangle :fill 0 0 w-px 15)
-  ;; border shadow
-  (love.graphics.setColor (love.math.colorFromBytes 0 0 0))
-  (love.graphics.rectangle :fill 30 15 15 h-px)
-  (love.graphics.rectangle :fill 30 15 w-px 10)
-  ;; terminal screen
-  (tput (.. "[soko:slgj24]$ LÖVE " state.moves) 60 40)
+(fn love.draw []
+  (style.monitor)
+  (style.tput (.. "[löve:soko]$ " state.moves) 2 1)
   (each [tile locs (pairs {"#" world.walls
-                           :O world.sinks
-                           "!" state.blocks
-                           "@" [[state.x state.y]]})]
+                           :! world.sinks
+                           :O state.blocks
+                           :u [[state.x state.y]]})]
     (each [_ [ii jj] (ipairs locs)]
-      (tput tile (* 30 (+ ii 1)) (* 40 (+ jj 1))))))
+      (style.tput tile (+ ii 1) (+ jj 1)))))
 
 (fn tick []
   (case state.direction
