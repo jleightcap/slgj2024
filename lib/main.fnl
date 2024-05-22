@@ -6,7 +6,7 @@
 (local engine (require :lib.engine))
 
 (fn load-puzzle [n]
-  (->> n (string.format "puzzles/microban-%d.txt") parser.parse))
+  (->> n (.. "puzzles/microban-") parser.parse))
 
 (local game {:number 1 :puzzle (load-puzzle 1) :mode :titlescreen})
 
@@ -36,5 +36,5 @@
     :r
     (->> game.number (load-puzzle) (set game.puzzle))
     (where (or :w :a :s :d))
-    (->> (engine.tick event game.puzzle.static game.puzzle.dynamic)
+    (->> (engine.tick event game.puzzle)
          (set game.puzzle.dynamic))))
