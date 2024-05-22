@@ -20,7 +20,7 @@
           "@" (tset tiles :avi [ii jj]))
         tiles))
       tiles
-    (-> line fun.enumerate)))
+      (-> line fun.enumerate)))
     {:walls {} :blocks {} :sinks {}}
     (-> f io.lines line-iter fun.enumerate)))
 
