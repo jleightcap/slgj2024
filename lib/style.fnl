@@ -4,12 +4,12 @@
 (fn universe []
   (-> (love.graphics.newFont :font/ProggyTiny.ttf scale)
       (love.graphics.setFont))
-  (love.graphics.setBackgroundColor (/ 43 255) (/ 43 255) (/ 43 255))
+  (love.graphics.setBackgroundColor (/ 30 255) (/ 30 255) (/ 30 255)) ; NOTE: not RBG, [0,1]
   ;; screen gradient
-  (love.graphics.setColor (love.math.colorFromBytes 47 47 47))
+  (love.graphics.setColor (love.math.colorFromBytes 35 35 35))
   (love.graphics.rectangle :fill (/ w-px 5) (/ h-px 3) w-px h-px 200 200)
   ;; border
-  (love.graphics.setColor (love.math.colorFromBytes 153 117 90))
+  (love.graphics.setColor (love.math.colorFromBytes 210 180 140))
   (love.graphics.rectangle :fill 0 0 30 h-px)
   (love.graphics.rectangle :fill 0 0 w-px 15)
   ;; border shadow
