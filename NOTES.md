@@ -7,6 +7,16 @@
 - library for gamedev functions https://github.com/rxi/lume/ packaged in default.nix
     - Fennel usage https://wiki.fennel-lang.org/lume
 
+luafun has forms more ammenable to Fennel's `->`/`->>` operators than Fennel itself
+
+```fennel
+(fn line-iter [lines]
+  "luafun-compatible `io.lines` iterator"
+  "https://github.com/luafun/luafun/issues/20#issuecomment-170504253"
+  #(let [v (lines)] (values v v)))
+```
+
+
 # modules
 
 currently using `(require :lib.grid)` for submodules, instead should follow

@@ -1,25 +1,27 @@
 (local fun (require :fun))
 
-(fn parse [f]
-  (let [parsed {; coordinates of walls
-                :walls {}
-                ; coordinates of movable block
-                :blocks {}
-                ; coordinates of sinks
-                :sinks {}}]
-    (each [[jj line] (fun.enumerate (io.lines f))]
-      (var jj (- jj 1)) ; NOTE: why does enumerating io.lines iterator start jj as 2?
-      (each [ii char (fun.iter line)]
-        (fn tile [id] (table.insert (. parsed id) [ii jj]))
+(fn line-iter [lines]
+  "luafun-compatible `io.lines` iterator"
+  "https://github.com/luafun/luafun/issues/20#issuecomment-170504253"
+  #(let [v (lines)] (values v v)))
 
+;; fnlfmt: skip
+(fn parse [f]
+  (fun.foldl (lambda [tiles jj line]
+    (fun.foldl (lambda [tiles ii char]
+      (do
         (case char
-          "#" (tile :walls)
-          "$" (tile :blocks)
-          "." (tile :sinks)
+          "#" (table.insert tiles.walls [ii jj])
+          "$" (table.insert tiles.blocks [ii jj])
+          "." (table.insert tiles.sinks [ii jj])
           "*" (do
-                (tile :blocks)
-                (tile :sinks))
-          "@" (tset parsed :avi [ii jj]))))
-    parsed))
+                (table.insert tiles.blocks [ii jj])
+                (table.insert tiles.sinks [ii jj]))
+          "@" (tset tiles :avi [ii jj]))
+        tiles))
+      tiles
+    (-> line fun.enumerate)))
+    {:walls {} :blocks {} :sinks {}}
+    (-> f io.lines line-iter fun.enumerate)))
 
 {: parse}
