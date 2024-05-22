@@ -11,14 +11,18 @@
 
 ;; TODO: abstract :puzzles/microban-1.txt into an argument
 ;; first decide on how puzzles are selected, or advanced when won
-(local game (-> :puzzles/microban-1.txt parser.parse game-data))
+(local data (-> :puzzles/microban-1.txt parser.parse game-data))
+(local initial data.dynamic)
 
 (fn love.draw []
   ;; TODO: this is re-drawing some constant parts of the screen
   ;; refactor into one-time setup and continuous components
   (style.universe)
-  (style.render game))
+  (style.render data))
 
 (fn love.keypressed [event]
-  (->> (engine.tick event game.static game.dynamic)
-       (set game.dynamic)))
+  (case event
+    :escape (love.event.quit)
+    :r (tset data :dynamic initial)
+    (where (or :w :a :s :d)) (->> (engine.tick event data.static data.dynamic)
+                                  (set data.dynamic))))
