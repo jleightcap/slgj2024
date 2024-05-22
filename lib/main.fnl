@@ -5,25 +5,10 @@
 (local parser (require :lib.parse))
 (local engine (require :lib.engine))
 
-;; TODO: mess
-(fn load-puzzle [number]
-  (let [puzzle (-> (string.format "puzzles/microban-%d.txt" number)
-                   parser.parse)]
-    (do
-      (tset puzzle :initial puzzle.dynamic)
-      puzzle)))
+(fn load-puzzle [n]
+  (->> n (string.format "puzzles/microban-%d.txt") parser.parse))
 
-;; TODO: mess
-(fn load-game []
-  (let [game {;; current microban puzzle number
-              :number 1
-              ;; :mode one of :titlescreen :puzzle
-              :mode :titlescreen}]
-    (do
-      (tset game :puzzle (load-puzzle game.number))
-      game)))
-
-(local game (load-game))
+(local game {:number 1 :puzzle (load-puzzle 1) :mode :titlescreen})
 
 (fn love.draw []
   ;; TODO: this is re-drawing some constant parts of the screen
@@ -31,19 +16,25 @@
   (style.universe)
   (case game.mode
     :titlescreen (style.titlescreen)
-    :puzzle (style.render game)))
+    :solving (style.render game)))
 
 (fn love.keypressed [event]
   (case event
-    :escape (case game.mode
-              :titlescreen (love.event.quit)
-              :puzzle (set game.mode :titlescreen))
-    :return (case game.mode :titlescreen (set game.mode :puzzle))
-    :n (case game.mode
-         :puzzle (do
-                   (set game.number (+ game.number 1))
-                   (set game.puzzle (load-puzzle game.number))))
-    :r (set game.puzzle.dynamic game.puzzle.initial)
+    :escape
+    (case game.mode
+      :titlescreen (love.event.quit)
+      :solving (set game.mode :titlescreen))
+    :return
+    (case game.mode :titlescreen (set game.mode :solving))
+    ;; FIXME: debug
+    ;; TODO: copy this logic into won check
+    :n
+    (case game.mode
+      :solving (do
+                 (set game.number (+ game.number 1))
+                 (set game.puzzle (load-puzzle game.number))))
+    :r
+    (->> game.number (load-puzzle) (set game.puzzle))
     (where (or :w :a :s :d))
     (->> (engine.tick event game.puzzle.static game.puzzle.dynamic)
          (set game.puzzle.dynamic))))

@@ -29,10 +29,11 @@
 
 (fn titlescreen []
   ;; TODO: decorate (authors? press enter? controls? diagram?)
-  (tput "./soko.bin" 3 3))
+  (tput :./soko.bin 3 2))
 
 (fn render [game]
-  (tput (string.format "[%d:%d]$ ./soko.bin" game.puzzle.dynamic.moves game.number) 2 1)
+  (tput (string.format "[%d:%d]$ ./soko.bin" game.puzzle.dynamic.moves
+                       game.number) 2 1)
   (each [tile locs (pairs {"#" game.puzzle.static.walls
                            :! game.puzzle.static.sinks
                            :O game.puzzle.dynamic.blocks
