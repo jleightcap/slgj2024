@@ -27,13 +27,16 @@
     (love.graphics.setColor (love.math.colorFromBytes 255 204 153))
     (love.graphics.print s i j)))
 
-(fn render [game]
-  (tput (.. "[löve:soko]$ " game.dynamic.moves) 2 1)
-  (each [tile locs (pairs {"#" game.static.walls
-                           :! game.static.sinks
-                           :O game.dynamic.blocks
-                           :u [game.dynamic.avi]})]
+(fn titlescreen []
+  (tput :SOKO 5 5))
+
+(fn render [puzzle]
+  (tput (.. "[löve:soko]$ " puzzle.dynamic.moves) 2 1)
+  (each [tile locs (pairs {"#" puzzle.static.walls
+                           :! puzzle.static.sinks
+                           :O puzzle.dynamic.blocks
+                           :u [puzzle.dynamic.avi]})]
     (each [_ [ii jj] (ipairs locs)]
       (tput tile (+ ii 1) (+ jj 1)))))
 
-{: universe : render}
+{: universe : render : titlescreen}

@@ -7,21 +7,23 @@
 
 ;; fnlfmt: skip
 (fn parse [f]
+  ;; {:static {:walls parsed.walls :sinks parsed.sinks}
+   ;; :dynamic {:avi parsed.avi :blocks parsed.blocks :moves 0}})
   (fun.foldl (lambda [tiles jj line]
     (fun.foldl (lambda [tiles ii char]
       (do
         (case char
-          "#" (table.insert tiles.walls [ii jj])
-          "$" (table.insert tiles.blocks [ii jj])
-          "." (table.insert tiles.sinks [ii jj])
+          "#" (table.insert tiles.static.walls [ii jj])
+          "$" (table.insert tiles.dynamic.blocks [ii jj])
+          "." (table.insert tiles.static.sinks [ii jj])
           "*" (do
-                (table.insert tiles.blocks [ii jj])
-                (table.insert tiles.sinks [ii jj]))
-          "@" (tset tiles :avi [ii jj]))
+                (table.insert tiles.dynamic.blocks [ii jj])
+                (table.insert tiles.static.sinks [ii jj]))
+          "@" (tset tiles.dynamic :avi [ii jj]))
         tiles))
       tiles
       (-> line fun.enumerate)))
-    {:walls {} :blocks {} :sinks {}}
+    {:static {:walls {} :sinks {}} :dynamic {:blocks {} :moves 0}}
     (-> f io.lines line-iter fun.enumerate)))
 
 {: parse}
