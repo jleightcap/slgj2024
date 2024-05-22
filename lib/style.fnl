@@ -24,18 +24,19 @@
     (love.graphics.setColor (love.math.colorFromBytes 0 0 0))
     (love.graphics.print s (+ i 5) (+ j 5))
     ;; character itself
-    (love.graphics.setColor (love.math.colorFromBytes 255 204 153))
+    (love.graphics.setColor (love.math.colorFromBytes 255 69 0))
     (love.graphics.print s i j)))
 
 (fn titlescreen []
-  (tput :SOKO 5 5))
+  ;; TODO: decorate (authors? press enter? controls? diagram?)
+  (tput "./soko.bin" 3 3))
 
-(fn render [puzzle]
-  (tput (.. "[löve:soko]$ " puzzle.dynamic.moves) 2 1)
-  (each [tile locs (pairs {"#" puzzle.static.walls
-                           :! puzzle.static.sinks
-                           :O puzzle.dynamic.blocks
-                           :u [puzzle.dynamic.avi]})]
+(fn render [game]
+  (tput (string.format "[%d:%d]$ ./soko.bin" game.puzzle.dynamic.moves game.number) 2 1)
+  (each [tile locs (pairs {"#" game.puzzle.static.walls
+                           :! game.puzzle.static.sinks
+                           :O game.puzzle.dynamic.blocks
+                           :u [game.puzzle.dynamic.avi]})]
     (each [_ [ii jj] (ipairs locs)]
       (tput tile (+ ii 1) (+ jj 1)))))
 

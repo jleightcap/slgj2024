@@ -31,7 +31,7 @@
   (style.universe)
   (case game.mode
     :titlescreen (style.titlescreen)
-    :puzzle (style.render game.puzzle)))
+    :puzzle (style.render game)))
 
 (fn love.keypressed [event]
   (case event
