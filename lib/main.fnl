@@ -5,12 +5,13 @@
 (local parser (require :lib.parse))
 (local engine (require :lib.engine))
 
+(fn game-data [parsed]
+  {:static {:walls parsed.walls :sinks parsed.sinks}
+   :dynamic {:avi parsed.avi :blocks parsed.blocks :moves 0}})
+
 ;; TODO: abstract :puzzles/microban-1.txt into an argument
 ;; first decide on how puzzles are selected, or advanced when won
-(local game
-       (let [parsed (parser.parse :puzzles/microban-1.txt)]
-         {:static {:walls parsed.walls :sinks parsed.sinks}
-          :dynamic {:avi parsed.avi :blocks parsed.blocks :moves 0}}))
+(local game (-> :puzzles/microban-1.txt parser.parse game-data))
 
 (fn love.draw []
   ;; TODO: this is re-drawing some constant parts of the screen
@@ -19,4 +20,5 @@
   (style.render game))
 
 (fn love.keypressed [event]
-  (set game.dynamic (engine.tick event game.static game.dynamic)))
+  (->> (engine.tick event game.static game.dynamic)
+       (set game.dynamic)))
