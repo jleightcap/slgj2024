@@ -50,6 +50,8 @@
             (set game.puzzle.dynamic))
         (when (engine.won? game)
           (next-puzzle)))
+    :m (doto hum
+             (: :setVolume 0))
     :b (if (not= game.mode :boss) (set game.mode :boss))
     :escape (case game.mode
       :titlescreen (love.event.quit)
@@ -57,8 +59,9 @@
       :boss (set game.mode :titlescreen)
       :solving (set game.mode :titlescreen))
     :return (case game.mode
+      :titlescreen (set game.mode :help)
       :help (set game.mode :solving)
-      :titlescreen (set game.mode :help))
+      :boss (set game.mode :solving))
     ;; FIXME: debug
     ;; TODO: copy this logic into won check
     :n (case game.mode
