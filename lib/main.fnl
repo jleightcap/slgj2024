@@ -8,7 +8,25 @@
 (fn load-puzzle [n]
   (->> n (.. :puzzles/microban-) (parser.parse) (parser.invariants)))
 
-(local game {:number 1 :puzzle (load-puzzle 1) :mode :titlescreen})
+(local game {;; game mode DFA state
+             :mode :titlescreen
+             ;; track boot sound effect playback
+             :booted false
+             ;; current game number, parsed into puzzle
+             :number 1
+             :puzzle (load-puzzle 1)})
+
+(local hum (doto (love.audio.newSource :transformer.wav :static)
+             (: :setVolume 0.25)))
+
+(local boot (love.audio.newSource :crt-on.wav :static))
+
+(fn love.update [dt]
+  (when (not game.booted)
+    (love.audio.play boot)
+    (set game.booted true))
+  (when (not (hum:isPlaying))
+    (love.audio.play hum)))
 
 (fn love.draw []
   ;; TODO: this is re-drawing some constant parts of the screen
@@ -16,6 +34,7 @@
   (style.universe)
   (case game.mode
     :titlescreen (style.titlescreen)
+    :help (style.help)
     :solving (style.render game)))
 
 (fn next-puzzle []
@@ -31,11 +50,15 @@
             (set game.puzzle.dynamic))
         (when (engine.won? game)
           (next-puzzle)))
+    :b (if (not= game.mode :boss) (set game.mode :boss))
     :escape (case game.mode
       :titlescreen (love.event.quit)
+      :help (set game.mode :titlescreen)
+      :boss (set game.mode :titlescreen)
       :solving (set game.mode :titlescreen))
     :return (case game.mode
-      :titlescreen (set game.mode :solving))
+      :help (set game.mode :solving)
+      :titlescreen (set game.mode :help))
     ;; FIXME: debug
     ;; TODO: copy this logic into won check
     :n (case game.mode
