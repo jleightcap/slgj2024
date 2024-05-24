@@ -33,7 +33,7 @@
 
 (fn invariants [parsed]
   "apply, inplace, the game invariants"
-  (assert (= (# parsed.static.sinks) (# parsed.dynamic.blocks)))
+  (assert (= (length parsed.static.sinks) (length parsed.dynamic.blocks)))
   (doto parsed
     (-> (. :static) (. :walls) (inplace-sort-tile))
     (-> (. :static) (. :sinks) (inplace-sort-tile))
