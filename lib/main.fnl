@@ -6,7 +6,7 @@
 (local engine (require :lib.engine))
 
 (fn load-puzzle [n]
-  (->> n (.. "puzzles/microban-") parser.parse))
+  (->> n (.. :puzzles/microban-) (parser.parse) (parser.invariants)))
 
 (local game {:number 1 :puzzle (load-puzzle 1) :mode :titlescreen})
 

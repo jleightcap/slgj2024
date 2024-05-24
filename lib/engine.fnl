@@ -1,3 +1,6 @@
+(local parser (require :lib.parse))
+(local fun (require :fun))
+
 (fn coordinateMatch? [pos1 pos2]
   (let [[x1 y1] pos1
         [x2 y2] pos2]
@@ -57,7 +60,9 @@
                   (+ puzzle.dynamic.moves 1))})))
 
 (fn won? [game]
-  ;; TODO: some kind of equality check between dynamic.blocks and static.sinks
-  false)
+  ;; NOTE: game.puzzle.static tiles are pre-sorted on construction (see: parser.invariants)
+  (parser.inplace-sort-tile game.puzzle.dynamic.blocks)
+  (fun.all (lambda [[x1 y1] [x2 y2]] (and (= x1 x2) (= y1 y2)))
+           (fun.zip game.puzzle.static.sinks game.puzzle.dynamic.blocks)))
 
-{: tick}
+{: tick : won?}
