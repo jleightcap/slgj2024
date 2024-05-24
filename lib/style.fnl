@@ -23,20 +23,20 @@
   (tput "*r   | restart" 4 2)
   (tput "*esc | back" 4 3)
   (tput "*b   | boss key" 4 4)
-  (tput "u    | you" 4 5)
-  (tput "!" 4 6)
-  (tput "O/O  | push on" 4 6)
-  (tput "!    | switch" 4 7))
+  (tput "*m   | mute" 4 5)
+  (tput "   u = you (wasd)" 4 6)
+  (tput " !" 4 7)
+  (tput " O/O = push on" 4 7)
+  (tput "   ! = switches" 4 8))
 
 (fn titlescreen [title-cursor]
   ;; TODO: decorate (authors? press enter? controls? diagram?)
-  (tput "$ ./soko.bin" 5 5)
+  (tput "$ ./soko.bin" 6 5)
   (not title-cursor))
 
 (fn render [game]
-  (tput (string.format :./soko.bin) 2 1)
-  (tput (.. "#" game.number) 12 1)
-  (tput game.puzzle.dynamic.moves 16 1)
+  (tput (.. "#" game.number) 8 1)
+  (tput game.puzzle.dynamic.moves 13 1)
   (each [tile locs (pairs {"#" game.puzzle.static.walls
                            :! game.puzzle.static.sinks
                            :O game.puzzle.dynamic.blocks
