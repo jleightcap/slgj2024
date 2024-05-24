@@ -27,4 +27,16 @@
     {:static {:walls {} :sinks {}} :dynamic {:avi [] :blocks {} :moves 0}}
     (-> f io.lines line-iter fun.enumerate)))
 
-{: parse}
+(fn inplace-sort-tile [t]
+  "inplace sort the coordinates of a tile sequential table"
+  (table.sort t (lambda [[x1 _] [x2 _]] (< x1 x2))))
+
+(fn invariants [parsed]
+  "apply, inplace, the game invariants"
+  (assert (= (# parsed.static.sinks) (# parsed.dynamic.blocks)))
+  (doto parsed
+    (-> (. :static) (. :walls) (inplace-sort-tile))
+    (-> (. :static) (. :sinks) (inplace-sort-tile))
+    (-> (. :dynamic) (. :blocks) (inplace-sort-tile))))
+
+{: parse : invariants : inplace-sort-tile}
