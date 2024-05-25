@@ -13,8 +13,8 @@
              ;; track boot sound effect playback
              :booted false
              ;; current game number, parsed into puzzle
-             :number 1
-             :puzzle (load-puzzle 1)})
+             :number 0
+             :puzzle (load-puzzle 0)})
 
 (local hum (doto (love.audio.newSource :transformer.wav :static)
              (: :setVolume 0.25)))
@@ -35,11 +35,16 @@
   (case game.mode
     :titlescreen (style.titlescreen)
     :help (style.help)
-    :solving (style.render game)))
+    :boss (style.boss)
+    :solving (style.render game)
+    :complete (style.complete)))
 
 (fn next-puzzle []
-  (set game.number (+ game.number 1))
-  (set game.puzzle (load-puzzle game.number)))
+  (if (= game.number 4)
+      (set game.mode :complete)
+      (do
+        (set game.number (+ game.number 1))
+        (set game.puzzle (load-puzzle game.number)))))
 
 ;; fnlfmt: skip
 (fn love.keypressed [event]
@@ -51,19 +56,16 @@
         (when (engine.won? game)
           (next-puzzle)))
     :m (doto hum
-             (: :setVolume 0))
-    :b (if (not= game.mode :boss) (set game.mode :boss))
-    :escape (case game.mode
-      :titlescreen (love.event.quit)
-      :help (set game.mode :titlescreen)
-      :boss (set game.mode :titlescreen)
-      :solving (set game.mode :titlescreen))
+      (: :setVolume 0))
+    :b (set game.mode :boss)
+    :escape (if (or (= game.mode :titlescreen) (= game.mode :complete))
+                (love.event.quit)
+                (set game.mode :titlescreen))
     :return (case game.mode
       :titlescreen (set game.mode :help)
       :help (set game.mode :solving)
       :boss (set game.mode :solving))
     ;; FIXME: debug
     ;; TODO: copy this logic into won check
-    :n (case game.mode
-       :solving (next-puzzle))
+    :n (case game.mode :solving (next-puzzle))
     :r (->> game.number (load-puzzle) (set game.puzzle))))

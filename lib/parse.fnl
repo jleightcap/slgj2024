@@ -29,6 +29,7 @@
 
 (fn inplace-sort-tile [t]
   "inplace sort the coordinates of a tile sequential table"
+  ;; FIXME: if x1==x2, then compare y1 y2
   (table.sort t (lambda [[x1 _] [x2 _]] (< x1 x2))))
 
 (fn invariants [parsed]

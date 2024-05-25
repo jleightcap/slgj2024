@@ -34,6 +34,15 @@
   (tput "$ ./soko.bin" 6 5)
   (not title-cursor))
 
+(fn complete []
+  (tput " $ ./soko.bin -h" 2 2)
+  (tput "     Albert Chae" 2 3)
+  (tput "   Jack Leightcap" 2 4)
+  (tput "     Spring Lisp" 2 6)
+  (tput "      Game Jam  " 2 7)
+  (tput "        2024    " 2 8))
+
+
 (fn render [game]
   (tput (.. "#" game.number) 8 1)
   (tput game.puzzle.dynamic.moves 13 1)
@@ -44,4 +53,4 @@
     (each [_ [ii jj] (ipairs locs)]
       (tput tile (+ ii 2) (+ jj 1)))))
 
-{: universe : render : titlescreen : help}
+{: universe : render : titlescreen : help : boss : complete}
