@@ -46,7 +46,6 @@
   (tput "      Game Jam  " 2 7)
   (tput "        2024    " 2 8))
 
-
 (fn render [game]
   (tput (.. "#" game.number) 2 4)
   (tput game.puzzle.dynamic.moves 2 5)

@@ -40,7 +40,7 @@
     :complete (style.complete)))
 
 (fn next-puzzle []
-  (if (= game.number 4)
+  (if (= game.number 78)
       (set game.mode :complete)
       (do
         (set game.number (+ game.number 1))
