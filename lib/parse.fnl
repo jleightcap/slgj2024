@@ -27,10 +27,13 @@
     {:static {:walls {} :sinks {}} :dynamic {:avi [] :blocks {} :moves 0}}
     (-> f io.lines line-iter fun.enumerate)))
 
+(fn coordinate< [[x1 y1] [x2 y2]]
+  (if (= x1 x2) (< y1 y2) (< x1 x2)))
+
 (fn inplace-sort-tile [t]
   "inplace sort the coordinates of a tile sequential table"
   ;; FIXME: if x1==x2, then compare y1 y2
-  (table.sort t (lambda [[x1 _] [x2 _]] (< x1 x2))))
+  (table.sort t coordinate<))
 
 (fn invariants [parsed]
   "apply, inplace, the game invariants"

@@ -1,6 +1,9 @@
 (local parser (require :lib.parse))
 (local fun (require :fun))
 
+(fn coordinate< [[x1 y1] [x2 y2]]
+  (if (= x1 x2) (< y1 y2) (< x1 x2)))
+
 (fn coordinateMatch? [pos1 pos2]
   (let [[x1 y1] pos1
         [x2 y2] pos2]
