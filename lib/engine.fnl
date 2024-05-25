@@ -24,6 +24,23 @@
         newBlock
         block)))
 
+;; given a move in a cardinal direction
+;; return avatar's next position and updated blocks
+;; If the current move isn't valid, the returned next position and blocks will be unchanged
+(fn attemptMove [avi move puzzle]
+  (let [nextAvi (addCoordinate avi move)]
+    (if (isWall? nextAvi puzzle)
+        [avi puzzle.dynamic.blocks]
+        (isBlock? nextAvi puzzle)
+        (let [nextBlockPos (addCoordinate nextAvi move)
+              blockCanMove (not (or (isWall? nextBlockPos puzzle)
+                                    (isBlock? nextBlockPos puzzle)))]
+          (if blockCanMove
+              [nextAvi
+               (replaceBlock puzzle.dynamic.blocks nextAvi nextBlockPos)]
+              [avi puzzle.dynamic.blocks]))
+        [nextAvi puzzle.dynamic.blocks])))
+
 (fn tick [event puzzle]
   (let [[x y] puzzle.dynamic.avi]
     ;; TODO: update blocks based on collision
