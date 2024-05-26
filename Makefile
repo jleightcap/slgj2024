@@ -1,4 +1,4 @@
-SRCS = $(wildcard lib/*.fnl)
+SRCS = $(wildcard *.fnl)
 
 # NOTE: overridable with environment variables
 # ```sh
@@ -20,4 +20,4 @@ fmt: $(SRCS:.fnl=.fmt)
 
 .PHONY: run
 run: all
-	$(LOVE) lib/
+	$(LOVE) .
