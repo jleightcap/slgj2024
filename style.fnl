@@ -1,8 +1,8 @@
 (local (w-px h-px) (love.window.getMode))
 (local scale (/ w-px 10))
 
-(local background (love.graphics.newImage :bg.png))
-(local font (love.graphics.newFont :font/ProggyTiny.ttf scale))
+(local background (love.graphics.newImage :assets/background.png))
+(local font (love.graphics.newFont :assets/ProggyTiny.ttf scale))
 (fn universe []
   (love.graphics.setFont font)
   (love.graphics.draw background 0 0))

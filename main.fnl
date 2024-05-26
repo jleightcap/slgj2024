@@ -16,10 +16,10 @@
              :number 0
              :puzzle (load-puzzle 0)})
 
-(local hum (doto (love.audio.newSource :transformer.wav :static)
+(local hum (doto (love.audio.newSource :assets/transformer.wav :static)
              (: :setVolume 0.25)))
 
-(local boot (love.audio.newSource :crt-on.wav :static))
+(local boot (love.audio.newSource :assets/crt-on.wav :static))
 
 (fn love.update [dt]
   (when (not game.booted)
