@@ -14,6 +14,9 @@ out/%.lua: src/%.fnl
 
 dist: soko-bin.love
 
+dist-web: dist
+	npx love.js soko-bin.love out_web -t soko-bin -c
+
 soko-bin.love: all
 	cp $(LUAFUN) out/
 	cd out/ && zip -r ../$@ .
@@ -29,3 +32,4 @@ run: all
 clean:
 	rm out/*.lua
 	rm soko-bin.love
+	rm -r out_web/*
