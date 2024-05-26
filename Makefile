@@ -1,9 +1,5 @@
 SRCS = $(wildcard *.fnl)
 
-# NOTE: overridable with environment variables
-# ```sh
-# $ LOVE=./love-11.5-x86_64.AppImage make ...
-# ```
 FENNEL ?= fennel
 LOVE ?= love
 
@@ -14,6 +10,11 @@ LOVE ?= love
 	fnlfmt --fix $^
 
 all: $(SRCS:.fnl=.lua)
+
+dist: soko-bin.zip
+
+soko-bin.zip: all
+	zip -r $@ . -x '*.git*'
 
 .PHONY: fmt
 fmt: $(SRCS:.fnl=.fmt)
