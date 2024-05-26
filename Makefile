@@ -1,4 +1,4 @@
-SRCS = $(wildcard *.fnl)
+SRCS = $(wildcard lib/*.fnl)
 
 FENNEL ?= fennel
 LOVE ?= love
@@ -21,4 +21,4 @@ fmt: $(SRCS:.fnl=.fmt)
 
 .PHONY: run
 run: all
-	$(LOVE) .
+	$(LOVE) lib/

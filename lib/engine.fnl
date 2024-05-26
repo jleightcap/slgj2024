@@ -1,4 +1,4 @@
-(local parser (require :parse))
+(local parser (require :lib.parse))
 (local fun (require :fun))
 
 (fn coordinate< [[x1 y1] [x2 y2]]

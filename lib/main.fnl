@@ -1,8 +1,8 @@
 (local fun (require :fun))
 
-(local style (require :style))
-(local parser (require :parse))
-(local engine (require :engine))
+(local style (require :lib.style))
+(local parser (require :lib.parse))
+(local engine (require :lib.engine))
 
 (fn load-puzzle [n]
   (->> n (.. :puzzles/microban-) (parser.parse) (parser.invariants)))
