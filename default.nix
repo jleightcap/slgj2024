@@ -21,6 +21,7 @@ in pkgs.stdenv.mkDerivation rec {
   src = ./.;
   nativeBuildInputs = with pkgs; [
     fennel
+    zip
     (lua5_2.withPackages (ps: with ps; [ luafun ]))
   ];
 
