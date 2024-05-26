@@ -7,7 +7,7 @@ let
     version = "0.1.3";
     knownRockspec = (fetchurl {
       url = "https://raw.github.com/luafun/luafun/master/fun-scm-1.rockspec";
-      sha256 ="sha256-35RcuCYBf5nSO65qBYLYNWmRCaCbFqQdXrk3wBy/lQU=";
+      sha256 = "sha256-35RcuCYBf5nSO65qBYLYNWmRCaCbFqQdXrk3wBy/lQU=";
     }).outPath;
     src = fetchFromGitHub {
       owner = "luafun";
@@ -21,6 +21,11 @@ in pkgs.stdenv.mkDerivation rec {
   src = ./.;
   nativeBuildInputs = with pkgs; [
     fennel
-    (lua5_2.withPackages (ps: with ps; [ lume luafun ]))
+    (lua5_2.withPackages (ps: with ps; [ luafun ]))
   ];
+
+  installPhase = ''
+    mkdir $out
+    cp *.lua $out/
+  '';
 }
