@@ -1,4 +1,4 @@
-SRCS = $(wildcard lib/*.fnl)
+SRCS = $(wildcard src/*.fnl)
 
 FENNEL ?= fennel
 LOVE ?= love
@@ -14,11 +14,11 @@ all: $(SRCS:.fnl=.lua)
 dist: soko-bin.zip
 
 soko-bin.zip: all
-	zip -r $@ . -x '*.git*'
+	zip -r $@ src/
 
 .PHONY: fmt
 fmt: $(SRCS:.fnl=.fmt)
 
 .PHONY: run
 run: all
-	$(LOVE) lib/
+	$(LOVE) src/
