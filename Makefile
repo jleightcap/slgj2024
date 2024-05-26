@@ -26,3 +26,4 @@ run: all
 .PHONY: clean
 clean:
 	rm out/*.lua
+	rm soko-bin.love
